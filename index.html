@@ -8,27 +8,57 @@
 <body>
     <div class="form-container">
         <h1>QR Code Form</h1>
-        <form>
+        <form id="qr-form">
             <label for="first-name">First Name</label>
             <input type="text" id="first-name" value="" disabled>
             <label for="last-name">Last Name</label>
             <input type="text" id="last-name" value="" disabled>
             <label for="address">Address</label>
             <input type="text" id="address" value="" disabled>
+            <label for="id">ID</label>
+            <input type="text" id="id" value="" disabled>
             <label for="phone-number">Phone Number</label>
-            <input type="text" id="phone-number" value="" disabled>
+            <input type="text" id="phone-number">
             <label for="date-of-birth">Date of Birth</label>
-            <input type="text" id="date-of-birth" value="" disabled>
+            <input type="text" id="date-of-birth">
+            <button type="button" id="generate-qr">Generate New QR Code</button>
         </form>
+        <div class="qr-code-container" id="qr-code-container">
+            <h2>QR Code</h2>
+            <img id="qr-code" alt="QR Code">
+        </div>
     </div>
     <script>
-        // Parse query parameters from the URL and pre-fill the form fields
-        const urlParams = new URLSearchParams(window.location.search);
-        document.getElementById('first-name').value = urlParams.get('first-name') || '';
-        document.getElementById('last-name').value = urlParams.get('last-name') || '';
-        document.getElementById('address').value = urlParams.get('address') || '';
-        document.getElementById('phone-number').value = urlParams.get('phone-number') || '';
-        document.getElementById('date-of-birth').value = urlParams.get('date-of-birth') || '';
+        const qrForm = document.getElementById('qr-form');
+        const qrCodeContainer = document.getElementById('qr-code-container');
+        const qrCodeImage = document.getElementById('qr-code');
+
+        qrForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+        });
+
+        document.getElementById('generate-qr').addEventListener('click', () => {
+            const firstName = document.getElementById('first-name').value;
+            const lastName = document.getElementById('last-name').value;
+            const address = document.getElementById('address').value;
+            const id = document.getElementById('id').value;
+            const phoneNumber = document.getElementById('phone-number').value;
+            const dateOfBirth = document.getElementById('date-of-birth').value;
+
+            // Generate a new QR code with ID and data from the first form
+            const url = `https://shreya-1298.github.io/demo.github.io/second-form.html?id=${id}&first-name=${encodeURIComponent(firstName)}&last-name=${encodeURIComponent(lastName)}&address=${encodeURIComponent(address)}&phone-number=${encodeURIComponent(phoneNumber)}&date-of-birth=${encodeURIComponent(dateOfBirth)}`;
+            generateQRCode(url);
+
+            qrCodeContainer.style.display = 'block';
+        });
+
+        qrCodeImage.addEventListener('click', () => {
+            qrCodeContainer.style.display = 'none';
+        });
+
+        function generateQRCode(data) {
+            qrCodeImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data)}`;
+        }
     </script>
 </body>
 </html>
